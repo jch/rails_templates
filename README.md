@@ -6,11 +6,11 @@ An extraction of common tasks I do when I create a new Rails project.
 
 For a new project:
 
-    rails new myapp -m http://github.com/jch/rails_templates/raw/master/rails.template
+    rails new myapp -m https://github.com/jch/rails_templates/raw/master/rails.template
 
 For an existing project:
 
-    rake rails:template LOCATION=http://github.com/jch/rails_templates/raw/master/rails.template
+    rake rails:template LOCATION=https://github.com/jch/rails_templates/raw/master/rails.template
 
 # Overview
 
