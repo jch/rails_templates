@@ -12,6 +12,8 @@ gem 'factory_girl_rails', :group => [:development, :test]
 
 gem 'rack-ssl', :group => [:production], :require => 'rack/ssl'
 
+run "bundle"
+
 # Testing
 
 remove_file "test/test_helper.rb"
@@ -87,5 +89,5 @@ end
 if yes?("Deploy to Heroku?")
   app_name = ask("What should the application be named?")
   app_name.gsub!(/_/, '-')
-  run "heroku create #{app_name} && git remote add heroku git@heroku.com:#{app_name}.git"
+  run "heroku create #{app_name}"
 end
