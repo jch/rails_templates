@@ -1,0 +1,91 @@
+# Gem Dependencies
+
+gem 'thin'
+gem 'devise'
+gem 'hoptoad_notifier'
+
+gem 'database_cleaner', :group => [:development, :test]
+gem 'fakeweb', :group => [:development, :test]
+gem 'ruby-debug19', :group => [:development, :test], :require => 'ruby-debug'
+gem 'shoulda', :group => [:development, :test]
+gem 'factory_girl_rails', :group => [:development, :test]
+
+gem 'rack-ssl', :group => [:production], :require => 'rack/ssl'
+
+# Testing
+
+remove_file "test/test_helper.rb"
+file 'test/test_helper.rb', <<-CODE
+ENV["RAILS_ENV"] = "test"
+require File.expand_path('../../config/environment', __FILE__)
+require 'rails/test_help'
+
+# DatabaseCleaner
+DatabaseCleaner.strategy = :transaction
+
+class ActiveSupport::TestCase
+  self.use_transactional_fixtures = true
+
+  def setup
+    DatabaseCleaner.start
+  end
+
+  def teardown
+    DatabaseCleaner.clean
+  end
+
+  # Returns any output to stdout while executing blk
+  def capture_stdout(&blk)
+    output = StringIO.new
+    $stdout = output
+    yield blk
+    $stdout = STDOUT
+    output
+  end
+end
+CODE
+
+# Remove Prototype Defaults
+remove_file "public/javascripts/controls.js"
+remove_file "public/javascripts/dragdrop.js"
+remove_file "public/javascripts/effects.js"
+remove_file "public/javascripts/prototype.js"
+
+# Hoptoad
+if yes?("Add Hoptoad?")
+  hoptoad_api_key = ask("What is your Hoptoad API key?")
+  file 'config/initializers/hoptoad.rb', <<-CODE
+HoptoadNotifier.configure do |config|
+  config.api_key = '#{hoptoad_api_key}'
+end
+CODE
+end
+
+# Git
+
+git :init
+append_file('.gitignore', '*~')
+append_file('.gitignore', '*.orig')
+append_file('.gitignore', '*.rej')
+
+# Github
+if yes?("Add to Github?")
+  auth_path = File.expand_path("~/.github_token")
+  unless File.exist?(auth_path)
+    auth = ask("What is your API token? (You can find it at https://github.com/account/admin)").strip
+    file(auth_path, auth)
+    chmod(auth_path, 0600)
+  end
+  name = ask("Project name?")
+  public = yes?("Public repo?") ? '1' : '0'
+  auth = "jch/token:#{File.read(auth_path).strip}"
+  run "curl -u '#{auth}' -F 'name=#{name}' -F 'public=#{public}' https://github.com/api/v2/json/repos/create", :capture => true
+end
+
+# Heroku
+
+if yes?("Deploy to Heroku?")
+  app_name = ask("What should the application be named?")
+  app_name.gsub!(/_/, '-')
+  run "heroku create #{app_name} && git remote add heroku git@heroku.com:#{app_name}.git"
+end
