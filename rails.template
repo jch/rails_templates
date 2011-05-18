@@ -47,6 +47,11 @@ class ActiveSupport::TestCase
 end
 CODE
 
+file 'test/factories.rb', <<-CODE
+# http://cheat.errtheblog.com/s/factory_girl/
+
+CODE
+
 # Remove Prototype Defaults
 remove_file "public/javascripts/controls.js"
 remove_file "public/javascripts/dragdrop.js"
