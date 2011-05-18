@@ -53,6 +53,8 @@ remove_file "public/javascripts/dragdrop.js"
 remove_file "public/javascripts/effects.js"
 remove_file "public/javascripts/prototype.js"
 
+remove_file "public/index.html"
+
 # Hoptoad
 if yes?("Add Hoptoad?")
   hoptoad_api_key = ask("What is your Hoptoad API key?")
