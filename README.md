@@ -48,6 +48,13 @@ was successfully created, a 'heroku' remote will be added for
 you. However, if the app failed to create, no remote repo will be
 added and you'll need to do it manually yourself.
 
+# Backup Setup
+
+Installs [backup](https://github.com/meskyanichi/backup/) gem. Defaults to
+gzip and save backups to S3. Common backup rake tasks included.
+
+    rake rails:template LOCATION=https://github.com/jch/rails_templates/blob/master/templates/backup.rb
+
 # Resources
 
 I learned about Rails application templates through a variety of
