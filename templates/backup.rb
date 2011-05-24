@@ -6,7 +6,7 @@
 
 # Add gem dependency to https://github.com/meskyanichi/backup
 gem 'backup', :version => '3.0.15'
-gem 'fog', :version => '0.7.0'  # used by backup for s3 uploads, but not a dependency
+gem 'fog', :version => '0.7.2'  # used by backup for s3 uploads, but not a dependency
 
 run "bundle"
 
