@@ -73,9 +73,9 @@ end
 # Git
 
 git :init
-append_file('.gitignore', '*~')
-append_file('.gitignore', '*.orig')
-append_file('.gitignore', '*.rej')
+append_file('.gitignore', "*~\n")
+append_file('.gitignore', "*.orig\n")
+append_file('.gitignore', "*.rej\n")
 
 # Github
 if yes?("Add to Github?")
