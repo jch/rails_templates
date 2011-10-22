@@ -1,6 +1,8 @@
 # Rails Template
 
-An extraction of common tasks I do when I create a new Rails project.
+A rails template of common tasks I do when I create a new Rails project.
+
+See [Creating and Customizing Rails Generators & Templates](http://guides.rubyonrails.org/generators.html)
 
 # Usage
 
