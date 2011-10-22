@@ -8,7 +8,7 @@
 gem 'backup', :version => '3.0.15'
 gem 'fog', :version => '0.7.2'  # used by backup for s3 uploads, but not a dependency
 
-run "bundle"
+run "bundle --quiet"
 
 db = ask("'postgresql' or 'mysql'? [default: postgresql]")
 db = db.blank? ? 'postgresql' : db
@@ -16,7 +16,7 @@ run "backup generate --databases='#{db}' --storages='s3' --compressors='gzip' --
 run "mv config.rb config/backup.rb"
 
 # Add rake backup tasks
-
+# TODO: these should be in erb templates
 file 'lib/tasks/backup.rake', <<-RAKETASK
 namespace :backup do
   desc "Run backups"
@@ -30,8 +30,14 @@ namespace :backup do
   end
 
   desc "List current available backups"
-  task :list do
-    
+  task :list => :environment do
+    s3 = YAML.load(File.read(File.join(Rails.root, 'config', 's3.yml')))
+    s3.symbolize_keys!
+    conn = Fog::Storage.new(:provider => 'AWS', aws_access_key_id: s3[:aws_access_key_id], aws_secret_access_key: s3[:aws_secret_access_key])
+    dir = conn.directories.select {|d| d.key == "myapp-key"}  # TODO: read appropriate key
+    dir.files.each do |file|
+      puts file.key
+    end
   end
 end
 RAKETASK

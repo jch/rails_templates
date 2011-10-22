@@ -1,17 +1,11 @@
 require 'test_helper'
 
 class BackupTest < MiniTest::Unit::TestCase
-  def setup
-    super
-    FileUtils.rm_rf 'foo'
-  end
-
   def test_backup_default
     stub_ask
     output = generate_app('backup.rb')
     assert_match /backup generate/, output[0]
     assert_match(/ Backup/, output[0])  # readme should be printed
-    
 
     assert_file "config/backup.rb" do |content|
       assert_match /PostgreSQL/, content
